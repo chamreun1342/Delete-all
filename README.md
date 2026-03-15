@@ -1,67 +1,110 @@
-<!DOCTYPE html><html lang="km">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>សារភាពស្នេហ៍</title>
+<title>Message Share Tool</title>
+
 <style>
-body {
-  font-family: 'Arial', sans-serif;
-  text-align: center;
-  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-  height: 100vh;
-  overflow: hidden;
-  margin: 0;
-  position: relative;
-}h1 { margin-top: 120px; font-size: 42px; color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); position: relative; }
+body{
+font-family:Arial;
+background:#111;
+color:white;
+text-align:center;
+padding:30px;
+}
 
-button { padding: 15px 35px; font-size: 20px; border: none; border-radius: 12px; cursor: pointer; position: absolute; }
+textarea,input{
+width:85%;
+padding:10px;
+margin:10px;
+border-radius:8px;
+border:none;
+}
 
-#yes { background: #28a745; color: white; top: 50%; left: 45%; transform: translate(-50%, -50%); }
+button{
+padding:12px 25px;
+margin:10px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+}
 
-#no { background: #dc3545; color: white; top: 50%; left: 55%; transform: translate(-50%, -50%); }
+.generate{
+background:#ff3b3b;
+color:white;
+}
 
-#byline { color: black; font-size: 20px; position: absolute; top: 60%; left: 50%; transform: translateX(-50%); font-weight: bold; white-space: nowrap; } </style>
+.share{
+background:#2ecc71;
+color:white;
+}
+
+#output{
+margin-top:20px;
+background:#222;
+padding:15px;
+border-radius:10px;
+height:200px;
+overflow:auto;
+}
+</style>
 
 </head>
-<body><h1 id="question">អូនព្រមធ្វើជាសង្សារបងអត់❤️</h1><button id="yes">Yes</button> <button id="no">No</button>
 
-<div id="byline">BY: Matin❤️</div><script>
-const yesBtn = document.getElementById('yes');
-const noBtn = document.getElementById('no');
+<body>
 
-// Yes button click -> go to YouTube
-yesBtn.addEventListener('click', ()=>{
-    window.location.href = "https://youtu.be/-__W6u7gjGg?si=H0YUGIbrVcTu2aHm";
-});
+<h2>MATIN</h2>
 
-// No button click -> moves randomly in screen, keeping ~3cm gap from Yes
-noBtn.addEventListener('click', ()=>{
-    const maxX = window.innerWidth - noBtn.offsetWidth;
-    const maxY = window.innerHeight - noBtn.offsetHeight;
+<textarea id="message" placeholder="Write message"></textarea>
 
-    const yesRect = yesBtn.getBoundingClientRect();
-    const minGap = 30; // approx 3cm
+<br>
 
-    let newX, newY;
-    do {
-        newX = Math.random() * maxX;
-        newY = Math.random() * maxY;
-    } while(Math.abs(newX - yesRect.left) < minGap || Math.abs(newY - yesRect.top) < minGap);
+<input type="number" id="count" placeholder="Number (100 / 10000)">
 
-    noBtn.style.left = newX + 'px';
-    noBtn.style.top = newY + 'px';
-});
+<br>
 
-// Keep buttons and BY: Matin centered
-function positionButtons(){
-    const rect = document.getElementById('question').getBoundingClientRect();
-    yesBtn.style.top = rect.bottom + 50 + 'px';
-    noBtn.style.top = rect.bottom + 50 + 'px';
-    yesBtn.style.left = '45%';
-    noBtn.style.left = '55%';
-    document.getElementById('byline').style.top = rect.bottom + 100 + 'px';
+<button class="generate" onclick="generate()">Generate</button>
+
+<button class="share" onclick="shareMsg()">Share</button>
+
+<div id="output"></div>
+
+<script>
+
+let finalMessage="";
+
+function generate(){
+
+let msg=document.getElementById("message").value;
+let count=document.getElementById("count").value;
+
+finalMessage="";
+let out="";
+
+for(let i=1;i<=count;i++){
+finalMessage += msg + "\n";
+out += i+". "+msg+"<br>";
 }
-window.addEventListener('resize', positionButtons);
-positionButtons();
-</script></body>
-</html>
+
+document.getElementById("output").innerHTML=out;
+
+}
+
+function shareMsg(){
+
+if(navigator.share){
+
+navigator.share({
+title:"Message",
+text:finalMessage
+});
+
+}else{
+
+alert("Your browser does not support share");
+
+}
+
+}
+
+</script>
