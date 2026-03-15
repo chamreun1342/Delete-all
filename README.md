@@ -53,7 +53,7 @@ overflow:auto;
 
 <body>
 
-<h2>MATIN</h2>
+<h2></h2>
 
 <textarea id="message" placeholder="Write message"></textarea>
 
